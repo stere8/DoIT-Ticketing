@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -29,6 +29,26 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    new_user = User(username=data['username'], email=data['email'], password=data['password'])
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify('message', 'new user added ${0}'.format(new_user.id)), 201
+
+
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    users = User.query.all()
+    output = []
+    for user in users:
+        user_data = {'id': user.id, 'username': user.username,'email': user.email }
+        output.append(user_data)
+    return jsonify(output)
+
+
 if __name__ == '__main__':
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run()
