@@ -2,7 +2,8 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 from backend.models.user import User
-from backend.app import db
+from backend.models.database import db
+
 
 user_bp = Blueprint('user_bp', __name__)
 
@@ -27,7 +28,7 @@ def login():
     return jsonify({"message": "Invalid credentials"}), 401
 
 
-@user_bp.route('/users', methods=['GET'])
+@user_bp.route('/', methods=['GET'])
 def get_all_users():
     users = User.query.all()
     output = []
@@ -37,7 +38,7 @@ def get_all_users():
     return jsonify(output)
 
 
-@user_bp.route('/users/<int:id>', methods=['GET'])
+@user_bp.route('/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get_or_404(id)
     user_data = {'id': user.id, 'username': user.username, 'email': user.email}

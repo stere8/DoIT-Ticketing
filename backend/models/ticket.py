@@ -1,4 +1,4 @@
-from backend.app import db
+from .database import db
 
 
 class Ticket(db.Model):
