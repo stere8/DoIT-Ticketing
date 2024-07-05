@@ -1,4 +1,5 @@
-Progress Update: 4-5/7/2024
+**Progress Update: 4-5/7/2024**
+
 Starting from Scratch: Building the API
 Today marked the beginning of my journey in creating the API for my application. I started with the basics, setting up a new Flask app with the classic "Hello World" example. This initial step was crucial to ensure that my development environment was correctly configured and that Flask was running smoothly.
 
