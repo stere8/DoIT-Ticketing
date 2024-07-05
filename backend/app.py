@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
-from models.database import db
+from backend.models.database import db
 from backend.routes.ticket_route import ticket_bp
 from backend.routes.user_routes import user_bp
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///doit.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
