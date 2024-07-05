@@ -16,6 +16,10 @@ jwt = JWTManager(app)
 app.register_blueprint(user_bp, url_prefix='/users')
 app.register_blueprint(ticket_bp, url_prefix='/tickets')
 
+@app.route('/')
+def index:
+    instructions=
+
 
 
 
