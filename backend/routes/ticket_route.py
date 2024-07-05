@@ -8,6 +8,7 @@ from backend.models.database import db
 ticket_bp = Blueprint('ticket_bp', __name__)
 
 @ticket_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_ticket():
     user_id = get_jwt_identity()
     data = request.get_json()
@@ -17,12 +18,20 @@ def create_ticket():
     return jsonify(TicketSchema().dump(new_ticket)), 201
 
 @ticket_bp.route('/', methods=['GET'])
+@jwt_required()
 def get_tickets():
     user_id = get_jwt_identity()
     tickets = Ticket.query.filter_by(user_id=user_id).all()
     return jsonify(TicketSchema(many=True).dump(tickets)), 200
 
+
+@ticket_bp.route('/all', methods=['GET'])
+def get_all_tickets():
+    tickets = Ticket.query.all()
+    return jsonify(TicketSchema(many=True).dump(tickets)), 200
+
 @ticket_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_ticket(id):
     data = request.get_json()
     ticket = Ticket.query.get_or_404(id)
@@ -33,6 +42,7 @@ def update_ticket(id):
     return jsonify(TicketSchema().dump(ticket)), 200
 
 @ticket_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_ticket(id):
     ticket = Ticket.query.get_or_404(id)
     db.session.delete(ticket)
