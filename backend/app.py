@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from backend.models.database import db
+from flask_migrate import Migrate
 from backend.routes.ticket_route import ticket_bp
 from backend.routes.user_routes import user_bp
 
@@ -10,6 +11,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
 
 db.init_app(app)
+migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
 
@@ -17,8 +19,10 @@ app.register_blueprint(user_bp, url_prefix='/users')
 app.register_blueprint(ticket_bp, url_prefix='/tickets')
 
 @app.route('/')
-def index:
-    instructions=
+def index():
+    with open('API_INSTRUCTIONS.md', 'r') as file:
+        instructions = file.read()
+    return instructions
 
 
 
