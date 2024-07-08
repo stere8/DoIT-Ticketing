@@ -5,13 +5,10 @@ import { LogoutComponent } from './logout/logout.component';
 import { SignupComponent } from './signup/signup.component';
 
 
-const routes: Routes = [
+export const routes: Routes = [
     {path:'dashboard',component:DashboardComponent},
     {path:'',redirectTo:'/dashboard',pathMatch:'full'},
     {path:'login', component:LoginComponent},
     {path:'logout', component:LogoutComponent},
     {path:'signup', component:SignupComponent},
 ];
-
-
-export default routes;
