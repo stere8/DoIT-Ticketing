@@ -171,3 +171,136 @@ This setup will display a list of preloaded tasks in the Angular application and
 
 ---
 
+8/7/2024
+
+### Today's Journal Entry
+
+
+---
+
+**Today's Activities:**
+
+1. **Understanding CORS:**
+   - **Concept:** Cross-Origin Resource Sharing (CORS) is a crucial security feature implemented by browsers to prevent web pages from making requests to a different domain than the one serving the page.
+   - **Implementation:** I configured `flask-cors` in the Flask backend to allow requests from our Angular frontend. This setup enables smooth communication between our client and server, overcoming cross-origin restrictions.
+   - **Code Example:**
+     ```python
+     from flask import Flask
+     from flask_cors import CORS
+
+     app = Flask(__name__)
+     CORS(app)  # Enable CORS for all routes
+
+     if __name__ == '__main__':
+         app.run(debug=True)
+     ```
+
+2. **Creating and Styling Angular Components:**
+   - **Components Created:** Login, Signup, Logout, Dashboard, and TaskDetail.
+   - **Styling:** I applied styles to `app.component.css` and `dashboard.component.css`, enhancing the visual appeal and user experience of these components.
+   - **Code Example:**
+     ```css
+     /* src/app/dashboard/dashboard.component.css */
+     .task-list {
+       background-color: #f5f5f5;
+       border-radius: 8px;
+       padding: 20px;
+       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     }
+     ```
+
+3. **Logging HTTP Requests:**
+   - **Purpose:** To facilitate debugging and ensure the accuracy of data fetched from the backend.
+   - **Implementation:** I used `console.log` statements in the `subscribe` method of Angular services to track the data and errors during HTTP requests.
+   - **Code Example:**
+     ```typescript
+     this.taskService.getAllTickets().subscribe({
+       next: (data) => {
+         console.log('Data received from getAllTickets:', data);
+         this.tasks = data;
+       },
+       error: (error) => {
+         console.error('Error received from getAllTickets:', error);
+       }
+     });
+     ```
+
+4. **Developing Services for Task Management:**
+   - **Service Created:** `TaskService` to handle CRUD operations for tasks.
+   - **Methods Implemented:** `getAllTickets`, `getTicketById`, `addNewTicket`, `editTicket`, and `deleteTicket`.
+   - **Code Example:**
+     ```typescript
+     import { Injectable } from '@angular/core';
+     import { HttpClient, HttpHeaders } from '@angular/common/http';
+     import { Observable } from 'rxjs';
+
+     @Injectable({
+       providedIn: 'root'
+     })
+     export class TaskService {
+       private baseUrl = 'http://127.0.0.1:5000/tickets';
+
+       constructor(private http: HttpClient) {}
+
+       private getAuthHeaders(): HttpHeaders {
+         const token = localStorage.getItem('authToken');
+         return new HttpHeaders({
+           'Authorization': `Bearer ${token}`,
+           'Content-Type': 'application/json'
+         });
+       }
+
+       getAllTickets(): Observable<any> {
+         return this.http.get(`${this.baseUrl}/all`, { headers: this.getAuthHeaders() });
+       }
+
+       getTicketById(id: number): Observable<any> {
+         return this.http.get(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
+       }
+
+       addNewTicket(ticket: any): Observable<any> {
+         return this.http.post(this.baseUrl, ticket, { headers: this.getAuthHeaders() });
+       }
+
+       editTicket(ticket: any, id: number): Observable<any> {
+         return this.http.put(`${this.baseUrl}/${id}`, ticket, { headers: this.getAuthHeaders() });
+       }
+
+       deleteTicket(id: number): Observable<any> {
+         return this.http.delete(`${this.baseUrl}/${id}`, { headers: this.getAuthHeaders() });
+       }
+     }
+     ```
+
+5. **Applying Bearer Token for Authentication:**
+   - **Purpose:** To secure API requests by including a Bearer token in the HTTP headers, ensuring that only authenticated users can access certain endpoints.
+   - **Implementation:** Created an `AuthService` to manage the token and included it in the headers of HTTP requests within `TaskService`.
+   - **Code Example:**
+     ```typescript
+     import { Injectable } from '@angular/core';
+
+     @Injectable({
+       providedIn: 'root'
+     })
+     export class AuthService {
+       private tokenKey = 'authToken';
+
+       getToken(): string | null {
+         return localStorage.getItem(this.tokenKey);
+       }
+
+       setToken(token: string): void {
+         localStorage.setItem(this.tokenKey, token);
+       }
+
+       removeToken(): void {
+         localStorage.removeItem(this.tokenKey);
+       }
+     }
+     ```
+
+---
+
+**Reflection:**
+
+Today was highly productive. I gained a deeper understanding of CORS and its role in web security, created and styled several Angular components, and learned how to effectively log HTTP requests for debugging purposes. Additionally, I implemented a `TaskService` to manage task-related operations and secured our API interactions using Bearer tokens. These advancements are essential for building secure and responsive web applications.
