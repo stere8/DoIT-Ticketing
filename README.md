@@ -171,4 +171,3 @@ This setup will display a list of preloaded tasks in the Angular application and
 
 ---
 
-I hope this enhanced README provides an engaging and informative chronicle of the DoIt-Ticketing System's development!
