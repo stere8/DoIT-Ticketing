@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from .models.ticket import Ticket
-from backend.schemas.ticket_schema import TicketSchema
-from backend.models.database import db
+from models.ticket import Ticket
+from schemas.ticket_schema import TicketSchema
+from models.database import db
 
 ticket_bp = Blueprint('ticket_bp', __name__)
 
