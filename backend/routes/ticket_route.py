@@ -4,8 +4,8 @@ from backend.models.ticket import Ticket
 from backend.schemas.ticket_schema import TicketSchema
 from backend.models.database import db
 
-
 ticket_bp = Blueprint('ticket_bp', __name__)
+
 
 @ticket_bp.route('/', methods=['POST'])
 @jwt_required()
@@ -16,6 +16,7 @@ def create_ticket():
     db.session.add(new_ticket)
     db.session.commit()
     return jsonify(TicketSchema().dump(new_ticket)), 201
+
 
 @ticket_bp.route('/', methods=['GET'])
 @jwt_required()
@@ -30,6 +31,7 @@ def get_all_tickets():
     tickets = Ticket.query.all()
     return jsonify(TicketSchema(many=True).dump(tickets)), 200
 
+
 @ticket_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_ticket(id):
@@ -41,6 +43,7 @@ def update_ticket(id):
     db.session.commit()
     return jsonify(TicketSchema().dump(ticket)), 200
 
+
 @ticket_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_ticket(id):
@@ -48,3 +51,22 @@ def delete_ticket(id):
     db.session.delete(ticket)
     db.session.commit()
     return jsonify({"message": "Ticket deleted"}), 200
+
+
+@ticket_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
+def get_ticket(id):
+    ticket = Ticket.query.get_or_404(id)
+    return jsonify(TicketSchema().dump(ticket)), 200
+
+
+@ticket_bp.route('/user/<int:id>', methods=['GET'])
+@jwt_required()
+def get_user_s_tickets(id):
+    user_id = get_jwt_identity()
+    if user_id != id:
+        return jsonify({"message": "Unauthorized access"}), 403
+
+    tickets = Ticket.query.filter_by(user_id=user_id).all()
+    return jsonify(TicketSchema(many=True).dump(tickets)), 200
+

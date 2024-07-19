@@ -18,9 +18,9 @@ export class LoginComponent {
 
   onSubmit() {
     const user = { email: this.email, password: this.password };
-    this.authService.login(user).subscribe(response => {
-      localStorage.setItem('access_token', response.access_token);
+    this.authService.login(user).subscribe({ next: (response) => {
+      this.authService.setToken(response.access_token);
       this.router.navigate(['/']);
-    });
+    }});
   }
 }

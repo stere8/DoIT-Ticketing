@@ -1,12 +1,13 @@
 // src/app/task/task.component.ts
 import { Component, OnInit, Input } from '@angular/core';
-import { Task } from '../task/task.model';
+import { Task } from './task.model';
 import { TaskService } from '../../services/task.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
+  standalone: true,
   styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit {
